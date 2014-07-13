@@ -5,9 +5,9 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="/android-sdk-macosx/platforms/android-19/android.jar"/>
 	<classpathentry kind="lib" path="/android-sdk-macosx/add-ons/addon-google_apis-google-10/libs/maps.jar"/>
-	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC/android/titanium.jar"/>
-	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC/android/kroll-common.jar"/>
-	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC/android/kroll-apt.jar"/>
+	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC2/android/titanium.jar"/>
+	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC2/android/kroll-common.jar"/>
+	<classpathentry kind="lib" path="/Users/shan/Library/Application Support/Titanium/mobilesdk/osx/3.3.0.RC2/android/kroll-apt.jar"/>
 	<classpathentry kind="src" path=".apt_generated">
 		<attributes>
 			<attribute name="optional" value="true"/>

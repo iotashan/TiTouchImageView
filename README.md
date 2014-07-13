@@ -1,70 +1,56 @@
-TiTouchImageView
+# TiTouchImageView Module
 ================
 
-Titanium native module for TouchImageView
+Titanium native module wrapper for TouchImageView: https://github.com/MikeOrtiz/TouchImageView
 
-## Quick Start
+Do you like pinching and zooming on iOS? Wish it just worked on Android too? Here you go!
 
-### Get it [![gitTio](http://gitt.io/badge.png)](http://gitt.io/component/org.iotashan.TiTouchImageView)
+## Get it [![gitTio](http://gitt.io/badge.png)](http://gitt.io/component/org.iotashan.TiTouchImageView)
 Download the latest distribution ZIP-file and consult the [Titanium Documentation](http://docs.appcelerator.com/titanium/latest/#!/guide/Using_a_Module) on how install it, or simply use the [gitTio CLI](http://gitt.io/cli):
 
 `$ gittio install org.iotashan.TiTouchImageView`
 
-INSTALL YOUR MODULE
--------------------
+## Referencing the module in your Ti mobile application 
 
-Mac OS X
---------
-Copy the distribution zip file into the `~/Library/Application Support/Titanium` folder
-
-Linux
------
-Copy the distribution zip file into the `~/.titanium` folder
-
-Windows
--------
-Copy the distribution zip file into the `C:\ProgramData\Titanium` folder
-
-
-REGISTER YOUR MODULE
---------------------
-
-Register your module with your application by editing `tiapp.xml` and adding your module.
-Example:
+Simply add the following lines to your `tiapp.xml` file:
 
 <modules>
-	<module version="0.1">org.iotashan.TiTouchImageView</module>
+	<module platform="android">org.iotashan.titouchimageview</module>
 </modules>
-
-When you run your project, the compiler will combine your module along with its dependencies
-and assets into the application.
-
-
-USING YOUR MODULE IN CODE
--------------------------
 
 To use your module in code, you will need to require it.
 
-For example,
+	var TiTouchImageView = require('org.iotashan.TiTouchImageView');
+	var myView = TiTouchImageView.createView();
 
-	var my_module = require('org.iotashan.TiTouchImageView');
-	my_module.foo();
+## API Properties
 
+###image
 
-TESTING YOUR MODULE
--------------------
+Accepts a string path to a local file, or a TiBlob image object.
 
-To test with the script, execute:
+###maxZoom
 
-	titanium run --dir=YOURMODULEDIR
+Maximum zoom value, as a decimal. "5.5" means you can zoom in 550%
 
-This will execute the app.js in the example folder as a Titanium application.
+###minZoom
 
+Minimum zoom value, as a decimal. "0.5" means you can zoom out to 50%
 
-DISTRIBUTING YOUR MODULE
--------------------------
+###zoom
 
-You can choose to manually distribute your module distribution zip file or through the Titanium Marketplace!
+Zoom value for the view, as a decimal. Want to zoom to 300%? Set the value to 3.
 
+## API Methods
 
-Cheers!
+###createView(props)
+
+Accepts a dictonary of properties. TiTouchImageView extends TiUIView, so you can set other properties like top/left, backgroundColor, etc. Returns the view.
+
+### resetZoom()
+
+Resets the zoom to the default value for the view.
+
+### scrollTo(x,y)
+
+Scrolls the view to the point specified.

@@ -13,17 +13,17 @@ import java.io.IOException;
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
 import org.appcelerator.kroll.annotations.Kroll;
+import org.appcelerator.kroll.common.AsyncResult;
+import org.appcelerator.kroll.common.Log;
+import org.appcelerator.kroll.common.TiConfig;
+import org.appcelerator.kroll.common.TiMessenger;
+import org.appcelerator.titanium.TiApplication;
 import org.appcelerator.titanium.TiBlob;
-import org.appcelerator.titanium.TiC;
-import org.appcelerator.titanium.util.Log;
-import org.appcelerator.titanium.util.TiConfig;
 import org.appcelerator.titanium.util.TiConvert;
 import org.appcelerator.titanium.util.TiUIHelper;
 import org.appcelerator.titanium.io.TiBaseFile;
 import org.appcelerator.titanium.io.TiFileFactory;
 import org.appcelerator.titanium.proxy.TiViewProxy;
-import org.appcelerator.titanium.view.TiCompositeLayout;
-import org.appcelerator.titanium.view.TiCompositeLayout.LayoutArrangement;
 import org.appcelerator.titanium.view.TiDrawableReference;
 import org.appcelerator.titanium.view.TiUIView;
 
@@ -31,10 +31,11 @@ import com.ortiz.touch.TouchImageView;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.PointF;
 import android.os.Message;
 
 
-@Kroll.proxy(creatableInModule=TiTouchImageViewModule.class, propertyAccessors = { "zoom", "image" })
+@Kroll.proxy(creatableInModule=TiTouchImageViewModule.class, propertyAccessors = { "zoom", "image", "maxZoom", "minZoom" })
 public class ViewProxy extends TiViewProxy
 {
 	// Standard Debugging variables
@@ -43,6 +44,7 @@ public class ViewProxy extends TiViewProxy
 	
 	private static final int MSG_FIRST_ID = TiViewProxy.MSG_LAST_ID + 1;
 	public static final int MSG_RESET_ZOOM = MSG_FIRST_ID + 101;
+	public static final int MSG_SCROLL_TO = MSG_FIRST_ID + 102;
 	
 	private class TiTouchImageView extends TiUIView
 	{
@@ -68,7 +70,13 @@ public class ViewProxy extends TiViewProxy
 				tiv.setZoom(TiConvert.toFloat(proxy.getProperty("zoom")));
 			}
 			if (props.containsKey("image")) {
-				tiv.setImageBitmap(loadImageFromApplication((String)proxy.getProperty("image")));
+				handleImage(proxy.getProperty("image"));
+			}
+			if (props.containsKey("maxZoom")) {
+				tiv.setMaxZoom(TiConvert.toFloat(proxy.getProperty("maxZoom")));
+			}
+			if (props.containsKey("minZoom")) {
+				tiv.setMinZoom(TiConvert.toFloat(proxy.getProperty("minZoom")));
 			}
 		}
 		
@@ -79,8 +87,19 @@ public class ViewProxy extends TiViewProxy
 				tiv.setZoom(TiConvert.toFloat(newValue));
 			}
 			if (key.equals("image")) {
-				tiv.setImageBitmap(loadImageFromApplication((String)newValue));
+				handleImage(newValue);
 			}
+			if (key.equals("maxZoom")) {
+				tiv.setMaxZoom(TiConvert.toFloat(newValue));
+			}
+			if (key.equals("minZoom")) {
+				tiv.setMinZoom(TiConvert.toFloat(newValue));
+			}
+		}
+
+		public void setScrollPosition(int x, int y)
+		{
+			tiv.setScrollPosition(x,y);
 		}
 
 		public void resetZoom()
@@ -88,18 +107,30 @@ public class ViewProxy extends TiViewProxy
 			tiv.resetZoom();
 		}
 		
-		public Bitmap loadImageFromApplication(String imageName) {
+		private Bitmap loadImageFromApplication(String imageName) {
 			Bitmap result = null;
 			try {
 				// Load the image from the application assets
 				String url = getPathToApplicationAsset(imageName);
 				TiBaseFile file = TiFileFactory.createTitaniumFile(new String[] { url }, false);
 				result = TiUIHelper.createBitmap(file.getInputStream());
-				Log.i(LCAT, " bitmap loaded");
 			} catch (IOException e) {
-				Log.e(LCAT, " EXCEPTION - IO");
+				Log.e(LCAT, " TiTouchImageView only supports local image files");
 			}
 			return result;
+		}
+		
+		private void handleImage(Object val)
+		{
+			if (val instanceof TiBlob) {
+				// this is a blob, parse accordingly
+				TiBlob imgBlob = (TiBlob)val;
+				TiDrawableReference ref = TiDrawableReference.fromBlob(proxy.getActivity(), imgBlob);
+				tiv.setImageBitmap(ref.getBitmap());
+			} else {
+				String imgValue = (String)val;
+				tiv.setImageBitmap(loadImageFromApplication(imgValue));
+			}
 		}
 
 		private String getPathToApplicationAsset(String assetName) {
@@ -139,6 +170,12 @@ public class ViewProxy extends TiViewProxy
 				getView().resetZoom();
 				handled = true;
 				break;
+			case MSG_SCROLL_TO:
+				handleScrollTo(msg.arg1, msg.arg2);
+				AsyncResult result = (AsyncResult) msg.obj;
+				result.setResult(null); // signal scrolled
+				handled = true;
+				break;
 			default:
 				handled = super.handleMessage(msg);
 		}
@@ -153,38 +190,17 @@ public class ViewProxy extends TiViewProxy
 		getMainHandler().removeMessages(MSG_RESET_ZOOM);
 		getMainHandler().sendEmptyMessage(MSG_RESET_ZOOM);
 	}
-/*
-	// Handle creation options
-	@Override
-	public void handleCreationDict(KrollDict options)
-	{
-		super.handleCreationDict(options);
-	}
 
-	// Methods
-	@Kroll.getProperty @Kroll.method
-	public String getImage()
-	{
-		return this.;
+	@Kroll.method
+	public void scrollTo(int x, int y) {
+		if (!TiApplication.isUIThread()) {
+			TiMessenger.sendBlockingMainMessage(getMainHandler().obtainMessage(MSG_SCROLL_TO, x, y), getActivity());
+		} else {
+			handleScrollTo(x,y);
+		}
 	}
-
-	@Kroll.setProperty @Kroll.method
-	public void setImage(String val)
-	{
-		image = val;
-//		tiv.setImageBitmap();
+	
+	private void handleScrollTo(int x, int y) {
+		getView().setScrollPosition(x,y);
 	}
-
-	@Kroll.getProperty @Kroll.method
-	public float getZoom()
-	{
-		return tiv.getCurrentZoom();
-	}
-
-	@Kroll.setProperty @Kroll.method
-	public void setZoom(float zoom)
-	{
-		tiv.setZoom(zoom);
-	}
-*/
 }

@@ -18,8 +18,10 @@ var imageView = TiTouchImageView.createView({
 	left:0,
 	right:0,
 	bottom:0,
-	image:'demo.jpg',
+	image:'demo2.jpg',
 	zoom:0.5,
+	maxZoom:5,
+	minZoom:0.25,
 });
 
 win.add(imageView);
@@ -28,21 +30,23 @@ var btn = Ti.UI.createButton({
 	top:10,
 	color:'#000',
 	backgroundColor:'#fff',
-	title:'2x Zoom',
+	title:'Demo Methods',
 });
 btn.addEventListener('click',function(){
-	imageView.zoom = 2;
+	imageView.image = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory,'demo.jpg').read();
+	imageView.zoom = 5;
+	imageView.scrollTo(500,500);
 });
 win.add(btn);
-
 
 var btn2 = Ti.UI.createButton({
 	bottom:10,
 	color:'#000',
 	backgroundColor:'#fff',
-	title:'Reset Zoom',
+	title:'Reset',
 });
 btn2.addEventListener('click',function(){
+	imageView.image = 'demo2.jpg';
 	imageView.resetZoom();
 });
 win.add(btn2);
