@@ -9,6 +9,7 @@
 package org.iotashan.TiTouchImageView;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 import org.appcelerator.kroll.KrollDict;
 import org.appcelerator.kroll.KrollProxy;
@@ -106,6 +107,16 @@ public class ViewProxy extends TiViewProxy
 		{
 			tiv.resetZoom();
 		}
+
+        public float getCurrentZoom()
+        {
+            return tiv.getCurrentZoom();
+        }
+
+        public PointF getScrollPosition()
+        {
+            return tiv.getScrollPosition();
+        }
 		
 		private Bitmap loadImageFromApplication(String imageName) {
 			Bitmap result = null;
@@ -203,4 +214,18 @@ public class ViewProxy extends TiViewProxy
 	private void handleScrollTo(int x, int y) {
 		getView().setScrollPosition(x,y);
 	}
+
+    @Kroll.method
+    public float getCurrentZoom() {
+        return getView().getCurrentZoom();
+    }
+
+    @Kroll.method
+    public HashMap getScrollPosition() {
+        PointF point = getView().getScrollPosition();
+        HashMap result = new HashMap();
+        result.put("x", point.x);
+        result.put("y", point.y);
+        return result;
+    }
 }
