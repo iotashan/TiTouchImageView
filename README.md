@@ -54,3 +54,11 @@ Resets the zoom to the default value for the view.
 ### scrollTo(x,y)
 
 Scrolls the view to the point specified.
+
+### getCurrentZoom()
+
+Returns the current zoom level as a float.
+
+### getScrollPosition()
+
+Returns the current scroll position as point co-ordinates (x,y)

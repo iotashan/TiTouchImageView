@@ -15,3 +15,4 @@ moduleid: org.iotashan.TiTouchImageView
 guid: 773f5121-35cb-47cc-9081-6d0f84bf1606
 platform: android
 minsdk: 3.2.0.GA
+architectures: armeabi armeabi-v7a x86
