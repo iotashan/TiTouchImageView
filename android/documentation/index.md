@@ -62,3 +62,8 @@ Returns the current zoom level as a float.
 ### getScrollPosition()
 
 Returns the current scroll position as point co-ordinates (x,y)
+
+### recycleBitmap ()
+
+Call this before you remove the view to prevent memory leaks (assuming you aren't going to reuse the view)
+

@@ -32,6 +32,7 @@ import com.ortiz.touch.TouchImageView;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.PointF;
 import android.os.Message;
 
@@ -152,6 +153,11 @@ public class ViewProxy extends TiViewProxy
 			
 			return result;
 		}
+
+        public void recycleBitmap ()
+        {
+            ((BitmapDrawable)tiv.getDrawable()).getBitmap().recycle();
+        }
 	}
 
 
@@ -227,5 +233,10 @@ public class ViewProxy extends TiViewProxy
         result.put("x", point.x);
         result.put("y", point.y);
         return result;
+    }
+
+    @Kroll.method
+    public void recycleBitmap() {
+        getView().recycleBitmap ();
     }
 }
