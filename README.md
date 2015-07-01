@@ -14,14 +14,18 @@ Download the latest distribution ZIP-file and consult the [Titanium Documentatio
 
 Simply add the following lines to your `tiapp.xml` file:
 
-<modules>
-	<module platform="android">org.iotashan.titouchimageview</module>
-</modules>
+```
+	<modules>
+		<module platform="android">org.iotashan.titouchimageview</module>
+	</modules>
+```
 
 To use your module in code, you will need to require it.
 
+```JavaScript
 	var TiTouchImageView = require('org.iotashan.TiTouchImageView');
 	var myView = TiTouchImageView.createView();
+```
 
 ## API Properties
 
