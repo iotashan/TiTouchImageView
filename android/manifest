@@ -10,7 +10,7 @@ license: MIT
 copyright: Copyright (c) 2014 by Shannon Hicks
 
 # these should not be edited
-name: TiTouchImageView
+name: titouchimageview
 moduleid: org.iotashan.TiTouchImageView
 guid: 773f5121-35cb-47cc-9081-6d0f84bf1606
 platform: android
