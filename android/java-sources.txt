@@ -1,0 +1,4 @@
+"/Users/InGrowth/Documents/Projects/Ti-Android-TouchImageView/android/build/generated/java/org/iotashan/TiTouchImageView/TiTouchImageViewBootstrap.java"
+"/Users/InGrowth/Documents/Projects/Ti-Android-TouchImageView/android/src/com/ortiz/touch/TouchImageView.java"
+"/Users/InGrowth/Documents/Projects/Ti-Android-TouchImageView/android/src/org/iotashan/TiTouchImageView/TiTouchImageViewModule.java"
+"/Users/InGrowth/Documents/Projects/Ti-Android-TouchImageView/android/src/org/iotashan/TiTouchImageView/ViewProxy.java"
