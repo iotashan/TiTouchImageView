@@ -2,8 +2,8 @@
 # this is your module manifest and used by Titanium
 # during compilation, packaging, distribution, etc.
 #
-version: 1.0.2
-apiversion: 2
+version: 1.1.2
+apiversion: 3
 description: TiTouchImageView
 author: Shannon Hicks
 license: MIT
@@ -14,5 +14,5 @@ name: TiTouchImageView
 moduleid: org.iotashan.TiTouchImageView
 guid: 773f5121-35cb-47cc-9081-6d0f84bf1606
 platform: android
-minsdk: 3.5.1.GA
-architectures: armeabi armeabi-v7a x86
+minsdk: 6.0.0.GA
+architectures: armeabi-v7a x86
