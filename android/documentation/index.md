@@ -25,25 +25,25 @@ To use your module in code, you will need to require it.
 
 ## API Properties
 
-###image
+### image
 
 Accepts a string path to a local file, or a TiBlob image object.
 
-###maxZoom
+### maxZoom
 
 Maximum zoom value, as a decimal. "5.5" means you can zoom in 550%
 
-###minZoom
+### minZoom
 
 Minimum zoom value, as a decimal. "0.5" means you can zoom out to 50%
 
-###zoom
+### zoom
 
 Zoom value for the view, as a decimal. Want to zoom to 300%? Set the value to 3.
 
 ## API Methods
 
-###createView(props)
+### createView(props)
 
 Accepts a dictonary of properties. TiTouchImageView extends TiUIView, so you can set other properties like top/left, backgroundColor, etc. Returns the view.
 
