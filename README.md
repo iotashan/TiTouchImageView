@@ -7,7 +7,9 @@ Do you like pinching and zooming on iOS? Wish it just worked on Android too? Her
 ## Get it [![gitTio](http://gitt.io/badge.png)](http://gitt.io/component/org.iotashan.TiTouchImageView)
 Download the latest distribution ZIP-file and consult the [Titanium Documentation](http://docs.appcelerator.com/titanium/latest/#!/guide/Using_a_Module) on how install it, or simply use the [gitTio CLI](http://gitt.io/cli):
 
-`$ gittio install org.iotashan.TiTouchImageView`
+```bash
+gittio install org.iotashan.TiTouchImageView
+```
 
 ## Referencing the module in your Ti mobile application 
 
