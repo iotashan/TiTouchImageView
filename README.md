@@ -1,5 +1,4 @@
 # TiTouchImageView Module
-================
 
 Titanium native module wrapper for TouchImageView: https://github.com/MikeOrtiz/TouchImageView
 
@@ -14,17 +13,17 @@ Download the latest distribution ZIP-file and consult the [Titanium Documentatio
 
 Simply add the following lines to your `tiapp.xml` file:
 
-```
-	<modules>
-		<module platform="android">org.iotashan.titouchimageview</module>
-	</modules>
+```xml
+<modules>
+	<module platform="android">org.iotashan.titouchimageview</module>
+</modules>
 ```
 
 To use your module in code, you will need to require it.
 
-```JavaScript
-	var TiTouchImageView = require('org.iotashan.TiTouchImageView');
-	var myView = TiTouchImageView.createView();
+```javascript
+var TiTouchImageView = require('org.iotashan.TiTouchImageView');
+var myView = TiTouchImageView.createView();
 ```
 
 ## API Properties
@@ -55,7 +54,7 @@ Accepts a dictonary of properties. TiTouchImageView extends TiUIView, so you can
 
 Resets the zoom to the default value for the view.
 
-### scrollTo(x,y)
+### scrollTo(x, y)
 
 Scrolls the view to the point specified.
 
@@ -65,4 +64,4 @@ Returns the current zoom level as a float.
 
 ### getScrollPosition()
 
-Returns the current scroll position as point co-ordinates (x,y)
+Returns the current scroll position as point co-ordinates (x, y)
