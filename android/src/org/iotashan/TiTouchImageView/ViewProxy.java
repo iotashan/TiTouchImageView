@@ -43,31 +43,31 @@ public class ViewProxy extends TiViewProxy
 	// Standard Debugging variables
 	private static final String LCAT = "TiTouchImageView";
 	private static final boolean DBG = TiConfig.LOGD;
-	
+
 	private static final int MSG_FIRST_ID = TiViewProxy.MSG_LAST_ID + 1;
 	public static final int MSG_RESET_ZOOM = MSG_FIRST_ID + 101;
 	public static final int MSG_SCROLL_TO = MSG_FIRST_ID + 102;
-	
+
 	private class TiTouchImageView extends TiUIView
 	{
 		TouchImageView tiv;
-		
+
 		public TiTouchImageView(final TiViewProxy proxy) {
 			super(proxy);
-			
+
 			tiv = new TouchImageView(proxy.getActivity());
-			
+
 			getLayoutParams().autoFillsHeight = true;
 			getLayoutParams().autoFillsWidth = true;
-			
+
 			setNativeView(tiv);
 		}
-		
+
 		@Override
 		public void processProperties(KrollDict props)
 		{
 			super.processProperties(props);
-			
+
 			if (props.containsKey("zoom")) {
 				tiv.setZoom(TiConvert.toFloat(proxy.getProperty("zoom")));
 			}
@@ -81,7 +81,7 @@ public class ViewProxy extends TiViewProxy
 				tiv.setMinZoom(TiConvert.toFloat(proxy.getProperty("minZoom")));
 			}
 		}
-		
+
 		@Override
 		public void propertyChanged(String key, Object oldValue, Object newValue, KrollProxy proxy)
 		{
@@ -99,7 +99,7 @@ public class ViewProxy extends TiViewProxy
 			}
 		}
 
-		public void setScrollPosition(int x, int y)
+		public void setScrollPosition(float x, float y)
 		{
 			tiv.setScrollPosition(x,y);
 		}
@@ -118,7 +118,7 @@ public class ViewProxy extends TiViewProxy
         {
             return tiv.getScrollPosition();
         }
-		
+
 		private Bitmap loadImageFromApplication(String imageName) {
 			Bitmap result = null;
 			try {
@@ -131,7 +131,7 @@ public class ViewProxy extends TiViewProxy
 			}
 			return result;
 		}
-		
+
 		private void handleImage(Object val)
 		{
 			if (val instanceof TiBlob) {
@@ -150,7 +150,7 @@ public class ViewProxy extends TiViewProxy
 			// path with the proxy context. This locates a resource relative to the
 			// application resources folder
 			String result = resolveUrl(null, assetName);
-			
+
 			return result;
 		}
 
@@ -177,11 +177,11 @@ public class ViewProxy extends TiViewProxy
 	{
 		return (TiTouchImageView) getOrCreateView();
 	}
-	
+
 	public boolean handleMessage(Message msg)
 	{
 		boolean handled = false;
-		
+
 		switch(msg.what) {
 			case MSG_RESET_ZOOM:
 				getView().resetZoom();
@@ -196,10 +196,10 @@ public class ViewProxy extends TiViewProxy
 			default:
 				handled = super.handleMessage(msg);
 		}
-		
+
 		return handled;
 	}
-	
+
 	// Methods
 	@Kroll.method
 	public void resetZoom()
@@ -209,34 +209,34 @@ public class ViewProxy extends TiViewProxy
 	}
 
 	@Kroll.method
-	public void scrollTo(int x, int y) {
+	public void scrollTo(float x, float y) {
 		if (!TiApplication.isUIThread()) {
-			TiMessenger.sendBlockingMainMessage(getMainHandler().obtainMessage(MSG_SCROLL_TO, x, y), getActivity());
+			TiMessenger.sendBlockingMainMessage(getMainHandler().obtainMessage(MSG_SCROLL_TO, (int)x, (int)y), getActivity());
 		} else {
 			handleScrollTo(x,y);
 		}
 	}
-	
-	private void handleScrollTo(int x, int y) {
+
+	private void handleScrollTo(float x, float y) {
 		getView().setScrollPosition(x,y);
 	}
 
-    @Kroll.method
-    public float getCurrentZoom() {
-        return getView().getCurrentZoom();
-    }
+  @Kroll.method
+  public float getCurrentZoom() {
+      return getView().getCurrentZoom();
+  }
 
-    @Kroll.method
-    public HashMap getScrollPosition() {
-        PointF point = getView().getScrollPosition();
-        HashMap result = new HashMap();
-        result.put("x", point.x);
-        result.put("y", point.y);
-        return result;
-    }
+  @Kroll.method
+  public HashMap getScrollPosition() {
+      PointF point = getView().getScrollPosition();
+      HashMap result = new HashMap();
+      result.put("x", point.x);
+      result.put("y", point.y);
+      return result;
+  }
 
-    @Kroll.method
-    public void recycleBitmap() {
-        getView().recycleBitmap ();
-    }
+  @Kroll.method
+  public void recycleBitmap() {
+      getView().recycleBitmap ();
+  }
 }
