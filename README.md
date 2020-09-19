@@ -32,7 +32,7 @@ var myView = TiTouchImageView.createView();
 
 ### image
 
-Accepts a string path to a local file, or a TiBlob image object.
+Accepts a string path to a local file, remote files or a TiBlob image object.
 
 ### maxZoom
 
