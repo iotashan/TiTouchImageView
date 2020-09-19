@@ -9,6 +9,7 @@
 package org.iotashan.TiTouchImageView;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 
 import org.appcelerator.kroll.KrollDict;
@@ -32,9 +33,12 @@ import com.ortiz.touch.TouchImageView;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.PointF;
+import android.os.AsyncTask;
 import android.os.Message;
+import android.widget.ImageView;
 
 
 @Kroll.proxy(creatableInModule=TiTouchImageViewModule.class, propertyAccessors = { "zoom", "image", "maxZoom", "minZoom" })
@@ -47,6 +51,32 @@ public class ViewProxy extends TiViewProxy
 	private static final int MSG_FIRST_ID = TiViewProxy.MSG_LAST_ID + 1;
 	public static final int MSG_RESET_ZOOM = MSG_FIRST_ID + 101;
 	public static final int MSG_SCROLL_TO = MSG_FIRST_ID + 102;
+
+
+	private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+		ImageView bmImage;
+
+		public DownloadImageTask(ImageView bmImage) {
+			this.bmImage = bmImage;
+		}
+
+		protected Bitmap doInBackground(String... urls) {
+			String urldisplay = urls[0];
+			Bitmap mIcon11 = null;
+			try {
+				InputStream in = new java.net.URL(urldisplay).openStream();
+				mIcon11 = BitmapFactory.decodeStream(in);
+			} catch (Exception e) {
+				Log.e("Error", e.getMessage());
+				e.printStackTrace();
+			}
+			return mIcon11;
+		}
+
+		protected void onPostExecute(Bitmap result) {
+			bmImage.setImageBitmap(result);
+		}
+	}
 
 	private class TiTouchImageView extends TiUIView
 	{
@@ -134,6 +164,7 @@ public class ViewProxy extends TiViewProxy
 
 		private void handleImage(Object val)
 		{
+
 			if (val instanceof TiBlob) {
 				// this is a blob, parse accordingly
 				TiBlob imgBlob = (TiBlob)val;
@@ -141,7 +172,12 @@ public class ViewProxy extends TiViewProxy
 				tiv.setImageBitmap(ref.getBitmap());
 			} else {
 				String imgValue = (String)val;
-				tiv.setImageBitmap(loadImageFromApplication(imgValue));
+
+				if (imgValue.indexOf("http://") > -1 || imgValue.indexOf("https://") > -1) {
+					new DownloadImageTask(tiv).execute(imgValue);
+				} else{
+					tiv.setImageBitmap(loadImageFromApplication(imgValue));
+				}
 			}
 		}
 
