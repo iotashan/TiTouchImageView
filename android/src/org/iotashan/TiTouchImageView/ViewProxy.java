@@ -29,7 +29,7 @@ import org.appcelerator.titanium.proxy.TiViewProxy;
 import org.appcelerator.titanium.view.TiDrawableReference;
 import org.appcelerator.titanium.view.TiUIView;
 
-import com.ortiz.touch.TouchImageView;
+import com.ortiz.touchview.TouchImageView;
 
 import android.app.Activity;
 import android.graphics.Bitmap;
