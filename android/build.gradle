@@ -1,5 +1,7 @@
+repositories {
+    maven { url 'https://jitpack.io' }
+}
 
 dependencies {
-	// Add the module's library dependencies here.
-	// See:  https://developer.android.com/studio/build/dependencies
+    implementation 'com.github.MikeOrtiz:TouchImageView:3.7.1'
 }

@@ -263,9 +263,9 @@ public class ViewProxy extends TiViewProxy
   }
 
   @Kroll.method
-  public HashMap getScrollPosition() {
+  public KrollDict getScrollPosition() {
       PointF point = getView().getScrollPosition();
-      HashMap result = new HashMap();
+      KrollDict result = new KrollDict();
       result.put("x", point.x);
       result.put("y", point.y);
       return result;
@@ -273,6 +273,6 @@ public class ViewProxy extends TiViewProxy
 
   @Kroll.method
   public void recycleBitmap() {
-      getView().recycleBitmap ();
+      getView().recycleBitmap();
   }
 }
