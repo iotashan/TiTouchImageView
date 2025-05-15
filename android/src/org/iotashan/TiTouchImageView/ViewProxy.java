@@ -63,13 +63,28 @@ public class ViewProxy extends TiViewProxy
 		protected Bitmap doInBackground(String... urls) {
 			String urldisplay = urls[0];
 			Bitmap mIcon11 = null;
+			String error = "TiTouchImageView: bitmap is null for url: " + urldisplay;
+			InputStream inputStream = null;
 			try {
-				InputStream in = new java.net.URL(urldisplay).openStream();
-				mIcon11 = BitmapFactory.decodeStream(in);
+				inputStream = new java.net.URL(urldisplay).openStream();
+				mIcon11 = BitmapFactory.decodeStream(inputStream);
 			} catch (Exception e) {
-				Log.e("Error", e.getMessage());
+				error += ", error: " + e.getMessage();
 				e.printStackTrace();
 			}
+
+			if (inputStream != null) {
+				try {
+					inputStream.close();
+				} catch (IOException e) {
+					error += ", could not close stream: " + e.getMessage();
+				}
+			}
+
+			if (mIcon11 == null) {
+				throw new RuntimeException(error);
+			}
+
 			return mIcon11;
 		}
 
@@ -169,14 +184,26 @@ public class ViewProxy extends TiViewProxy
 				// this is a blob, parse accordingly
 				TiBlob imgBlob = (TiBlob)val;
 				TiDrawableReference ref = TiDrawableReference.fromBlob(proxy.getActivity(), imgBlob);
-				tiv.setImageBitmap(ref.getBitmap());
+				Bitmap bm = ref.getBitmap();
+				tiv.setImageBitmap(bm);
+				if (bm == null) {
+					String path = imgBlob.getNativePath();
+					if (path == null) {
+						path = "";
+					}
+					throw new RuntimeException("TiTouchImageView: bitmap is null for TiBlob: " + path);
+				}
 			} else {
 				String imgValue = (String)val;
 
 				if (imgValue.indexOf("http://") > -1 || imgValue.indexOf("https://") > -1) {
 					new DownloadImageTask(tiv).execute(imgValue);
 				} else{
-					tiv.setImageBitmap(loadImageFromApplication(imgValue));
+					Bitmap bm = loadImageFromApplication(imgValue);
+					tiv.setImageBitmap(bm);
+					if (bm == null) {
+						throw new RuntimeException("TiTouchImageView: bitmap is null for String: " + imgValue);
+					}
 				}
 			}
 		}
@@ -263,9 +290,9 @@ public class ViewProxy extends TiViewProxy
   }
 
   @Kroll.method
-  public HashMap getScrollPosition() {
+  public KrollDict getScrollPosition() {
       PointF point = getView().getScrollPosition();
-      HashMap result = new HashMap();
+      KrollDict result = new KrollDict();
       result.put("x", point.x);
       result.put("y", point.y);
       return result;
@@ -273,6 +300,6 @@ public class ViewProxy extends TiViewProxy
 
   @Kroll.method
   public void recycleBitmap() {
-      getView().recycleBitmap ();
+      getView().recycleBitmap();
   }
 }
